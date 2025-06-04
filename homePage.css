@@ -1,0 +1,183 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+/* עיצוב header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    padding: 15px 30px;
+    color: white;
+    position: relative;
+}
+
+/* הלוגו באמצע ובגודל 50px */
+header img.logo {
+    height: 50px;         /* בדיוק כמו בדף המוצרים */
+    display: block;
+    margin: 0 auto;
+}
+
+/* nav בצד ימין (בעברית) */
+header nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* כפתור התחברות/הרשמה - כתום ובצד ימין */
+#login-btn {
+    background-color: #ff9800;
+    color: #fff;
+    border: none;
+    border-radius: 2em;
+    padding: 10px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+    order: 1; /* ראשון ב-nav */
+}
+
+/* כפתור מוצרים - כחול בהיר */
+#products-btn {
+    background-color: #fff;
+    color: #007bff;
+    border: none;
+    border-radius: 2em;
+    padding: 10px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+    order: 2; /* שני ב-nav */
+}
+
+#login-btn:hover {
+    background: #ffa940;
+    color: #fff;
+}
+#products-btn:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.carousel {
+    width: 360px;
+    height: 260px;
+    background: #e3f2fd;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.carousel img {
+    width: 95%;
+    height: 95%;
+    object-fit: contain;
+    transition: opacity 0.3s;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 99;
+    right: 0; left: 0; top: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: #fff;
+    margin: 10% auto;
+    padding: 30px 20px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+}
+.close {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    align-self: flex-end;
+}
+.close:hover {
+    color: #007bff;
+}
+.modal-content input {
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.modal-content button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.modal-content button:last-child {
+    background: #ff9800;
+}
+
+@media (max-width: 600px) {
+    header, .logo-title {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    main {
+        min-height: 40vh;
+    }
+    .carousel {
+        width: 95vw;
+        height: 200px;
+    }
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

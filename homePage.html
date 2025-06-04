@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>חנות אופניים</title>
+    <link rel="stylesheet" href="homePage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <nav>
+            <button id="login-btn" onclick="initLoginSystem()">התחברות/הרשמה</button>
+            <button id="products-btn" onclick="goToProducts()">מוצרים</button>
+        </nav>
+        <img src="./img/logo.png" alt="לוגו אופניים" class="logo">
+        <div style="width:120px"></div>
+    </header>
+    <main>
+        <div class="carousel">
+            <img id="carousel-img" src="https://www.giant-bicycles.com/_generated/_generated_au/bikes/models/images/800/2022/Talon_1_ColorA.jpg" alt="אופניים">
+        </div>
+        <div id="welcome" style="text-align:center;margin-top:30px;font-size:1.2em;"></div>
+    </main>
+    <footer>
+        <p>יצירת קשר: <a href="mailto:info@bikestore.co.il">info@bikestore.co.il</a> | טלפון: <a href="tel:03-9876543">03-9876543</a></p>
+    </footer>
+
+    <!-- מודל התחברות/הרשמה -->
+    <div id="login-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>התחברות / הרשמה</h2>
+        <input type="text" id="email" placeholder="אימייל" autocomplete="username">
+        <input type="password" id="password" placeholder="סיסמה" autocomplete="current-password">
+        <button id="do-login">התחבר</button>
+        <button id="do-register" style="background:#ff9800;">הרשמה</button>
+      </div>
+    </div>
+    <script src="homePage.js"></script>
+</body>
+</html>
