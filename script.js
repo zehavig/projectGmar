@@ -28,16 +28,17 @@
 // }
 
 // -------------------- הצגת כל המוצרים בדף הראשי --------------------
+
+/**
+ * הצגת כל המוצרים בדף הראשי
+ */
+// ...existing code...
+
 function Product_display() {
-    // שליפת מערך המוצרים מה-LocalStorage
-    let product = localStorage.getItem("Products");
-    let productj = JSON.parse(product);
+    let productj = JSON.parse(localStorage.getItem("Products"));
+    let sec = document.querySelector('section');
 
-    // מציאת אלמנט section להצגת המוצרים
-    let sec = document.getElementsByTagName('section');
-
-    // מעבר על כל מוצר ויצירת אלמנטים להצגה
-    for (let index = 0; index < productj.length; index++) {
+    productj.forEach(product => {
         let NewProduct = document.createElement('div');
         let name = document.createElement('p');
         let price = document.createElement('p');
@@ -45,231 +46,73 @@ function Product_display() {
         let AddCart = document.createElement('button');
         let moreDetails = document.createElement('button');
 
-        // הוספת האלמנטים ל-DOM
-        sec[0].appendChild(NewProduct);
-        NewProduct.appendChild(image);
-        NewProduct.appendChild(name);
-        NewProduct.appendChild(price);
-        NewProduct.appendChild(AddCart);
-        NewProduct.appendChild(moreDetails);
-
-        // הגדרת תוכן האלמנטים
-        image.src = productj[index].img;
-        name.innerText = productj[index].name;
-        price.innerText = productj[index].price + "₪";
+        image.src = product.img;
+        name.innerText = product.name;
+        price.innerText = product.price + "₪";
         AddCart.innerText = "הוסף לסל";
         moreDetails.innerText = "לפרטים נוספים";
 
-        // מעבר לעמוד פרטים נוספים בלחיצה
+        NewProduct.append(image, name, price, AddCart, moreDetails);
+        sec.appendChild(NewProduct);
+
         moreDetails.addEventListener('click', () => {
-            sessionStorage.setItem("Id", productj[index].id);
+            sessionStorage.setItem("Id", product.id);
             window.location = './index2.html';
         });
 
-        // הוספת מוצר לעגלה בלחיצה
         AddCart.addEventListener('click', () => {
-            addcart(productj[index].id);
+            addcart(product.id);
+            showToast('המוצר נוסף לסל בהצלחה!');
         });
-    }
+    });
 }
 
-// // -------------------- מערכת הרשמה והתחברות --------------------
-// function initLoginSystem() {
-//     // --- פונקציות עזר לניהול משתמשים ---
-//     function getUsers() {
-//         return JSON.parse(localStorage.getItem('users') || "[]");
-//     }
-//     function saveUsers(users) {
-//         localStorage.setItem('users', JSON.stringify(users));
-//     }
-//     function setCurrentUser(email) {
-//         localStorage.setItem('currentUser', email);
-//     }
-//     function getCurrentUser() {
-//         return localStorage.getItem('currentUser');
-//     }
-//     function clearCurrentUser() {
-//         localStorage.removeItem('currentUser');
-//     }
-//     function showWelcome() {
-//         let welcome = document.getElementById('welcome');
-//         let email = getCurrentUser();
-//         if (welcome) {
-//             welcome.textContent = email ? `שלום, ${email}!` : "";
-//         }
-//     }
-
-//     // --- קישור לאלמנטים של המודל ---
-//     let loginBtn = document.getElementById('login-btn');
-//     let modal = document.getElementById('login-modal');
-//     let closeModal = document.getElementById('close-modal');
-//     let doLogin = document.getElementById('do-login');
-//     let doRegister = document.getElementById('do-register');
-//     let emailInput = document.getElementById('email');
-//     let passwordInput = document.getElementById('password');
-
-//     // עדכון טקסט הכפתור לפי מצב המשתמש
-//     function updateLoginBtn() {
-//         if (getCurrentUser()) {
-//             loginBtn.textContent = 'יציאה';
-//         } else {
-//             loginBtn.textContent = 'התחברות/הרשמה';
-//         }
-//     }
-
-//     // לחיצה על כפתור התחברות/הרשמה או יציאה
-//     loginBtn.onclick = function() {
-//         if (getCurrentUser()) {
-//             if (confirm('להתנתק מהחשבון?')) {
-//                 clearCurrentUser();
-//                 updateLoginBtn();
-//                 showWelcome();
-//                 alert('התנתקת בהצלחה!');
-//             }
-//             return;
-//         }
-//         // הצגת מודל התחברות/הרשמה
-//         modal.style.display = 'flex';
-//         emailInput.value = '';
-//         passwordInput.value = '';
-//     };
-
-//     // סגירת המודל בלחיצה על X
-//     closeModal.onclick = function() {
-//         modal.style.display = 'none';
-//         emailInput.value = '';
-//         passwordInput.value = '';
-//     };
-
-//     // סגירת המודל בלחיצה מחוץ לחלון
-//     window.onclick = function(event) {
-//         if (event.target === modal) {
-//             modal.style.display = 'none';
-//             emailInput.value = '';
-//             passwordInput.value = '';
-//         }
-//     };
-
-//     // התחברות משתמש קיים
-//     doLogin.onclick = function() {
-//         let email = emailInput.value.trim();
-//         let pass = passwordInput.value.trim();
-//         if (!email || !pass) {
-//             alert('יש למלא אימייל וסיסמה');
-//             return;
-//         }
-//         let users = getUsers();
-//         let u = users.find(u => u.email === email);
-//         if (!u) {
-//             alert('משתמש לא קיים. יש להירשם.');
-//             return;
-//         }
-//         if (u.password !== pass) {
-//             alert('סיסמה שגויה');
-//             return;
-//         }
-//         setCurrentUser(email);
-//         modal.style.display = 'none';
-//         updateLoginBtn();
-//         showWelcome();
-//         alert('התחברת בהצלחה!');
-//     };
-
-//     // הרשמת משתמש חדש
-//     doRegister.onclick = function() {
-//         let email = emailInput.value.trim();
-//         let pass = passwordInput.value.trim();
-//         if (!email || !pass) {
-//             alert('יש למלא אימייל וסיסמה');
-//             return;
-//         }
-//         let users = getUsers();
-//         if (users.find(u => u.email === email)) {
-//             alert('אימייל זה כבר רשום');
-//             return;
-//         }
-//         if (users.find(u => u.password === pass)) {
-//             alert('הסיסמה הזו כבר בשימוש אצל משתמש אחר');
-//             return;
-//         }
-//         users.push({email: email, password: pass});
-//         saveUsers(users);
-//         setCurrentUser(email);
-//         modal.style.display = 'none';
-//         updateLoginBtn();
-//         showWelcome();
-//         alert('נרשמת והתחברת בהצלחה!');
-//     };
-
-//     // בדיקת מצב התחברות בטעינת הדף
-//     updateLoginBtn();
-//     showWelcome();
-//     let email = getCurrentUser();
-//     if (email) {
-//         let users = getUsers();
-//         if (!users.find(u => u.email === email)) {
-//             clearCurrentUser();
-//             updateLoginBtn();
-//             showWelcome();
-//         }
-//     }
-// }
-
-// -------------------- הצגת פרטי מוצר בעמוד פרטים --------------------
 function moreDetail() {
-    let product = localStorage.getItem("Products");
-    let productjs = JSON.parse(product);
+    let productj = JSON.parse(localStorage.getItem("Products"));
     let id = sessionStorage.getItem("Id");
     let article = document.getElementById('art');
-    let selectedProduct = productjs.find(product => product.id == id);
+    let selectedProduct = productj.find(product => product.id == id);
 
-    // יצירת אלמנטים להצגת פרטי המוצר
     let aside = document.createElement('aside');
     let name = document.createElement('p');
     let price = document.createElement('p');
     let image = document.createElement('img');
     let expansion = document.createElement('img');
     let AddCart = document.createElement('button');
+    let goToCartBtn = document.createElement('button');
 
     name.innerText = selectedProduct.name;
     price.innerText = selectedProduct.price + '₪';
     image.src = selectedProduct.img;
     expansion.src = selectedProduct.expansion;
     AddCart.innerText = "הוסף לסל";
+    goToCartBtn.innerText = "למעבר לעגלה";
 
-    // הוספת המוצר לעגלה ומעבר לעמוד עגלה
     AddCart.addEventListener('click', () => {
-        window.location = './index3.html';
-        myCart();
+        addcart(selectedProduct.id);
+        showToast('המוצר נוסף לסל בהצלחה!');
     });
 
-    // הוספת האלמנטים ל-DOM
+    goToCartBtn.addEventListener('click', () => {
+        window.location = './index3.html';
+    });
+
+    aside.append(name, image, expansion, price, AddCart, goToCartBtn);
     article.appendChild(aside);
-    aside.appendChild(name);
-    aside.appendChild(image);
-    aside.appendChild(expansion);
-    aside.appendChild(price);
-    aside.appendChild(AddCart);
-    // (כפתורי מידה - קוד מוסתר)
 }
 
-// -------------------- עגלת קניות --------------------
-
-// פונקציה להוספת מוצר לעגלה
 function addcart(id) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
     cart.push(id);
     sessionStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// הצגת עגלת קניות עם שליטה בכמות ומחיקה
 function myCart() {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
     let products = JSON.parse(localStorage.getItem("Products")) || [];
     let cartSection = document.getElementById('cartDisplay');
     cartSection.innerHTML = '';
 
-    // חישוב כמויות לכל מוצר
     let quantities = {};
     cart.forEach(id => {
         quantities[id] = (quantities[id] || 0) + 1;
@@ -277,7 +120,6 @@ function myCart() {
 
     let totalPrice = 0;
 
-    // מעבר על כל מוצר בעגלה
     Object.keys(quantities).forEach(itemId => {
         let selectedProduct = products.find(product => product.id == itemId);
         if (selectedProduct) {
@@ -293,7 +135,6 @@ function myCart() {
             let price = document.createElement('p');
             price.innerText = selectedProduct.price + "₪";
 
-            // שליטה בכמות
             let quantityDiv = document.createElement('div');
             quantityDiv.style.display = "flex";
             quantityDiv.style.alignItems = "center";
@@ -301,7 +142,7 @@ function myCart() {
 
             let minusBtn = document.createElement('button');
             minusBtn.innerText = "-";
-            minusBtn.onclick = () => updateQuantity(itemId, -1);
+            minusBtn.addEventListener('click', () => updateQuantity(itemId, -1));
 
             let qtySpan = document.createElement('span');
             qtySpan.innerText = quantities[itemId];
@@ -309,50 +150,37 @@ function myCart() {
 
             let plusBtn = document.createElement('button');
             plusBtn.innerText = "+";
-            plusBtn.onclick = () => updateQuantity(itemId, 1);
+            plusBtn.addEventListener('click', () => updateQuantity(itemId, 1));
 
-            // כפתור מחיקה
             let deleteBtn = document.createElement('button');
             deleteBtn.innerText = "🗑️";
             deleteBtn.title = "מחק מוצר מהסל";
             deleteBtn.className = "delete-btn";
-            deleteBtn.onclick = () => removeProduct(itemId);
+            deleteBtn.addEventListener('click', () => removeProduct(itemId));
 
-            // הוספת כפתורי כמות ומחיקה
-            quantityDiv.appendChild(minusBtn);
-            quantityDiv.appendChild(qtySpan);
-            quantityDiv.appendChild(plusBtn);
-            quantityDiv.appendChild(deleteBtn);
+            quantityDiv.append(minusBtn, qtySpan, plusBtn, deleteBtn);
 
-            // הוספת כל האלמנטים לשורה
-            productDiv.appendChild(image);
-            productDiv.appendChild(name);
-            productDiv.appendChild(price);
-            productDiv.appendChild(quantityDiv);
-
+            productDiv.append(image, name, price, quantityDiv);
             cartSection.appendChild(productDiv);
 
             totalPrice += selectedProduct.price * quantities[itemId];
         }
     });
 
-    // הצגת סכום סופי
     let totalElement = document.createElement('p');
     totalElement.innerText = "סה''כ לתשלום: " + totalPrice + "₪";
     cartSection.appendChild(totalElement);
 
-    // כפתור תשלום
     let payBtn = document.createElement('button');
     payBtn.innerText = "לתשלום עכשיו";
     payBtn.className = "pay-btn";
-    payBtn.onclick = function() {
+    payBtn.addEventListener('click', function() {
         alert("תודה על הרכישה!");
         sessionStorage.removeItem("cart");
         myCart();
-    };
+    });
     cartSection.appendChild(payBtn);
 
-    // פונקציה פנימית לעדכון כמויות
     function updateQuantity(itemId, change) {
         let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
         if (change === 1) {
@@ -365,7 +193,6 @@ function myCart() {
         myCart();
     }
 
-    // פונקציה פנימית למחיקת מוצר מהעגלה
     function removeProduct(itemId) {
         let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
         cart = cart.filter(id => id != itemId);
@@ -374,37 +201,32 @@ function myCart() {
     }
 }
 
-// -------------------- יצירת header ו-footer דינמיים --------------------
 document.addEventListener("DOMContentLoaded", function () {
-    // יצירת header
     let header = document.createElement("header");
 
     let logo = document.createElement("img");
     logo.src = "./img/logo.png";
     logo.alt = "לוגו החנות";
-    logo.style.height = "90px"; // להגדלת הלוגו
-    logo.style.cursor = "pointer";
     logo.onclick = function () {
         location.href = 'homePage.html';
     };
 
     let nav = document.createElement("nav");
 
-    // // כפתור הרשמה / התחברות
-    // let loginBtn = document.createElement("button");
-    // loginBtn.textContent = "הרשמה / התחברות";
-    // loginBtn.onclick = function () {
-    //     location.href = 'signup.html';
-    // };
+    let cartBtn = document.createElement("button");
+    cartBtn.textContent = "מעבר לעגלה";
+    cartBtn.onclick = function () {
+        location.href = "index3.html";
+    };
+    nav.appendChild(cartBtn);
 
-    // nav.appendChild(loginBtn);
-    header.appendChild(logo);
-    header.appendChild(nav);
+header.appendChild(nav);
+header.appendChild(logo);
 
-    // הוספת header לראש הדף
+
+
     document.body.prepend(header);
 
-    // יצירת footer
     let footer = document.createElement("footer");
 
     let phoneP = document.createElement("p");
@@ -413,12 +235,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let mailP = document.createElement("p");
     mailP.textContent = "📧 מייל: store@example.com";
 
-    footer.appendChild(phoneP);
-    footer.appendChild(mailP);
+    footer.append(phoneP, mailP);
 
-    // הוספת footer לסוף הדף
     document.body.appendChild(footer);
-
-    // הפעלת המפה של גוגל (אם צריך)
 });
 
+function showToast(message) {
+    let oldToast = document.getElementById('toast-message');
+    if (oldToast) oldToast.remove();
+
+    let toast = document.createElement('div');
+    toast.id = 'toast-message';
+    toast.innerText = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => { toast.classList.add('show'); }, 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 1800);
+}

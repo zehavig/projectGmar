@@ -1,47 +1,62 @@
-/* עיצוב כללי */
 body {
-    background: #f0f0f0;
+    background: #fffbe7;
     font-family: 'Assistant', Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    direction: rtl;
 }
 
-/* עיצוב לכותרת */
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
+main, #cartDisplay {
+    flex: 1 0 auto;
+}
+
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #007bff;
-    padding: 15px;
+    padding: 15px 30px;
     color: white;
+    position: relative;
 }
 
 header img {
-    height: 50px;
+    height: 90px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
 }
 
-nav {
+header nav {
     display: flex;
     gap: 10px;
+    align-items: center;
+    min-width: 180px;
 }
 
-nav button {
-    background: white;
+header nav button {
+    background: #fff;
     color: #007bff;
     border: none;
-    padding: 10px 15px;
-    font-size: 16px;
+    border-radius: 2em;
+    padding: 10px 25px;
+    font-size: 1rem;
     cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
+    font-weight: bold;
+    margin: 0 5px;
+    transition: background 0.2s, color 0.2s;
 }
-
-nav button:hover {
-    background: #0056b3;
-    color: white;
+header nav button:hover {
+    background: #007bff;
+    color: #fff;
 }
 
 /* עיצוב לכותרת תחתונה */
@@ -61,23 +76,9 @@ footer {
     height: 300px;
     margin-bottom: 15px;
     border-radius: 10px;
-} 
-/* עיצוב חשבונית */
-body {
-    background: #fffbe7;
-    font-family: 'Assistant', Arial, sans-serif;
-    padding: 0;
 }
 
-html, body {
-    height: 100%;
-    min-height: 100%;
-}
-
-#cartDisplay {
-    flex: 1 0 auto;
-}
-
+/* עיצוב עגלת קניות */
 #cartDisplay {
     background: #fff;
     border: 2px solid #e0c97f;
@@ -90,7 +91,7 @@ html, body {
     direction: rtl;
 }
 
-#cartDisplay div {
+#cartDisplay div, .cart-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -100,6 +101,7 @@ html, body {
     box-shadow: none;
     border-radius: 0;
     width: 100%;
+    gap: 10px;
 }
 
 #cartDisplay img {
@@ -129,17 +131,7 @@ html, body {
     padding-top: 15px;
 }
 
-
 /* עיצוב שורת מוצר בעגלה */
-.cart-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    border-bottom: 1px dashed #e0c97f;
-    padding: 10px 0;
-}
-
 .cart-row button {
     background: #007bff;
     color: #fff;
@@ -151,7 +143,6 @@ html, body {
     cursor: pointer;
     transition: background 0.2s;
 }
-
 .cart-row button:hover {
     background: #0056b3;
 }
@@ -163,25 +154,6 @@ html, body {
     font-weight: bold;
     font-size: 16px;
 }
-
-.pay-btn {
-    background: #28a745;
-    color: #fff;
-    border: none;
-    padding: 12px 30px;
-    font-size: 20px;
-    border-radius: 8px;
-    margin: 30px auto 0 auto;
-    display: block;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.pay-btn:hover {
-    background: #218838;
-}
-
-
 
 /* עיצוב כפתור מחיקה בעגלה */
 .cart-row .delete-btn {
@@ -202,50 +174,44 @@ html, body {
 .cart-row .delete-btn:hover {
     background: #b52a37;
 }
-/* עיגון הפוטר לתחתית הדף */
-html, body {
-    height: 100%;
-    min-height: 100%;
-}
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-#cartDisplay {
-    flex: 1 0 auto;
-}
-
-footer {
-    flex-shrink: 0;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-header {
-    display: flex;
-    justify-content: center;   /* מרכז את כל התוכן */
-    align-items: center;
-    background-color: #007bff;
-    padding: 15px;
-    color: white;
-    position: relative;        /* מאפשר מיקום יחסי ל-nav */
-}
-
-header img {
-    height: 50px;
-    margin: 0 auto;
+/* עיצוב כפתור תשלום */
+.pay-btn {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-size: 20px;
+    border-radius: 8px;
+    margin: 30px auto 0 auto;
     display: block;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.pay-btn:hover {
+    background: #218838;
 }
 
-/* אם יש לך nav, תוכל למקם אותו עם absolute */
-header nav {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    gap: 10px;
+/* עיצוב טוסט */
+#toast-message {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #09ff00;
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 24px;
+    font-size: 1.1em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+#toast-message.show {
+    opacity: 1;
+}
+button,
+ nav button {
+    border-radius: 1px;
 }
