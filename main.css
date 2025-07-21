@@ -1,0 +1,798 @@
+/*
+ * main.css - קובץ CSS מאוחד לכל דפי ה-HTML
+ * מכיל כללים כלליים, Header, Footer, ועיצובים ספציפיים לעגלת קניות, דף מוצרים ודף פרטי מוצר.
+ */
+
+/* ==================== 1. כללים גלובליים לכל הדפים ==================== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    direction: rtl; /* כיוון כתיבה מימין לשמאל */
+    background-color: #f8f8f8; /* רקע אפור בהיר ורגוע */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
+main, #cartDisplay, section, article#art {
+    flex: 1 0 auto; /* לוודא שתוכן הראשי תופס מקום ודוחף את הפוטר לתחתית */
+    /* חשוב: זה אומר שגם section ו-article#art צריכים להיות בתוך תגית <main> אם אתה משתמש בה. */
+}
+
+
+/* ==================== 2. Header - כותרת עליונה (נוצר ע"י JS) ==================== */
+header {
+    display: flex;
+    justify-content: space-between; /* כפתורים בקצוות, לוגו במרכז */
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff; /* רקע לבן נקי */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* הלוגו - דגש על מרכוז וודאות תצוגה */
+header .logo {
+    height: 70px; /* גודל הלוגו */
+    cursor: pointer;
+    /* כדי למרכז את הלוגו כאשר יש אלמנטים משני הצדדים (nav וכפתורים משמאל): */
+    /* אם הלוגו הוא האלמנט השני מתוך שלושה (לדוגמה: כפתורים_שמאל | לוגו | כפתורים_ימין),
+       ה-justify-content: space-between ב-header עצמו ידאג למרכוז אוטומטי.
+       אין צורך ב-margin: auto כאן אם הפריסה היא כזו. */
+    flex-shrink: 0; /* מונע מהלוגו להתכווץ אם יש הרבה כפתורים */
+    margin: 0 auto; /* יכול לעזור אם יש רק שני אלמנטים בהדר (לוגו ו-nav) */
+    display: block; /* לוודא שהאלמנט מוצג כבלוק */
+}
+
+/* קבוצת כפתורי ניווט ימניים */
+header nav {
+    display: flex;
+    gap: 15px; /* רווח בין כפתורים */
+    flex-grow: 1; /* יתפוס מקום כדי לדחוף את הלוגו למרכז */
+    justify-content: flex-end; /* ליישר אותם לימין */
+}
+
+/* קבוצת כפתורים/סמלילים שמאליים (לדוגמה: עגלה, מועדפים).
+   חשוב: אם אין אלמנטים בצד שמאל, הלוגו לא ייושר במרכז באופן מושלם עם justify-content: space-between.
+   במקרה כזה, שקול להוסיף div ריק עם class="left-buttons" (כמו מטה) או לשנות את ה-justify-content ב-header.
+*/
+header .left-buttons {
+    display: flex;
+    gap: 15px;
+    flex-grow: 1; /* יתפוס מקום כדי לדחוף את הלוגו למרכז */
+    justify-content: flex-start; /* ליישר אותם לשמאל */
+    /* flex-basis: 180px; - הסרתי את זה כדי לאפשר גמישות. אפשר להוסיף אם רוצים רוחב מינימלי קבוע. */
+}
+
+header nav button,
+header .left-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+header nav button:hover,
+header .left-buttons button:hover {
+    background-color: #0056b3;
+}
+
+
+/* ==================== 3. דף הבית - Carousel ==================== */
+.carousel {
+    width: 100%;
+    max-width: 800px; /* רוחב מקסימלי סביר */
+    height: 400px; /* גובה קבוע לקרוסלה */
+    margin: 0 auto 30px auto;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ימלא את המסגרת, ייתכן שחלק מהתמונה יחתך */
+    display: block;
+    border-radius: 8px;
+}
+
+#welcome {
+    font-size: 1.8em;
+    color: #007bff;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* ==================== 4. דף מוצרים - Product Display Section ==================== */
+section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+section > div { /* Product Card */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+section > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+section > div img {
+    max-width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+section > div p {
+    margin: 8px 0;
+    font-size: 1.1em;
+    color: #555;
+}
+
+section > div p:first-of-type {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.2em;
+    min-height: 40px; /* כדי לשמור על גובה אחיד לכותרת */
+}
+
+section > div p:last-of-type {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 1.3em;
+}
+
+section > div button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+section > div button:hover {
+    background-color: #218838;
+}
+
+section > div button:last-of-type { /* כפתור "פרטים נוספים" או דומה */
+    background-color: #6c757d;
+    margin-top: 5px;
+}
+
+section > div button:last-of-type:hover {
+    background-color: #5a6268;
+}
+
+
+/* ==================== 5. דף פרטי מוצר - Product Detail Article ==================== */
+article#art {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px;
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    gap: 40px;
+    flex-wrap: wrap; /* כדי שירד שורה במובייל */
+}
+
+article#art aside {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+article#art aside p {
+    margin: 10px 0;
+    text-align: center;
+}
+
+article#art aside p:first-of-type { /* שם המוצר */
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+article#art aside p:last-of-type { /* מחיר המוצר */
+    font-size: 2em;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+article#art aside img {
+    max-width: 100%;
+    height: auto;
+    max-height: 350px;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* אם יש תמונה נוספת (כמו תיאור) */
+article#art aside img:last-of-type {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+article#art aside button { /* כפתור הוספה לעגלה */
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 15px;
+    width: 80%;
+    max-width: 300px;
+    transition: background-color 0.3s ease;
+}
+
+article#art aside button:hover {
+    background-color: #218838;
+}
+
+article#art aside button:last-of-type { /* כפתור חזרה לדף מוצרים */
+    background-color: #6c757d;
+    margin-top: 10px;
+}
+
+article#art aside button:last-of-type:hover {
+    background-color: #5a6268;
+}
+
+
+/* ==================== 6. עגלת קניות - Cart Display ==================== */
+#cartDisplay {
+    max-width: 800px; /* רוחב סביר יותר */
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#cartDisplay h2 { /* כותרת לדף העגלה אם תבחר להוסיף */
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.cart-row {
+    display: flex;
+    justify-content: space-between; /* פריסה מרווחת */
+    align-items: center; /* יישור אנכי למרכז */
+    padding: 15px 0;
+    border-bottom: 1px dashed #e0c97f; /* קו מקווקו */
+    /* הסרנו gap כדי לשלוט במרווחים ידנית */
+    flex-wrap: nowrap; /* מונע שבירת שורה אלא אם כן במובייל */
+}
+
+.cart-row:last-of-type {
+    border-bottom: none; /* אין קו תחתון לפריט האחרון */
+}
+
+.cart-row img {
+    width: 80px; /* תמונה בגודל סביר */
+    height: 80px;
+    object-fit: contain;
+    border-radius: 5px;
+    margin-left: 15px; /* מרווח מימין לתמונה */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex-shrink: 0; /* מונע התכווצות התמונה */
+}
+
+.cart-row .product-info { /* עוטף את שם המוצר והמחיר */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* יישור לימין בתוך העמודה */
+    flex-grow: 1; /* יתפוס כמה שיותר מקום */
+    margin-right: 15px; /* מרווח משמאל לפרטי המוצר */
+}
+
+.cart-row .product-info p {
+    margin: 0;
+    text-align: right;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.cart-row .product-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.cart-row .product-price {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 5px;
+}
+
+.cart-row .quantity-controls { /* עוטף כפתורי כמות */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+    flex-shrink: 0; /* מונע התכווצות */
+    margin-right: 15px; /* מרווח מכפתור המחיקה */
+}
+
+.cart-row .quantity-controls button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+.cart-row .quantity-controls button:hover {
+    background-color: #0056b3;
+}
+
+.cart-row .qty-span {
+    padding: 0 10px;
+    min-width: 25px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* עיצוב כפתור המחיקה - סמליל פח אשפה */
+.cart-row .delete-btn {
+    background: none; /* הסרת רקע */
+    border: none; /* הסרת מסגרת */
+    color: #dc3545; /* צבע אדום לסמליל */
+    font-size: 1.8em; /* גודל סמליל */
+    cursor: pointer;
+    padding: 5px; /* פדינג פנימי לאזור הקליק */
+    transition: color 0.2s ease, background-color 0.2s ease;
+    display: flex; /* לשימוש עם Font Awesome */
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* מונע התכווצות אגרסיבית */
+    width: 35px; /* רוחב קבוע */
+    height: 35px; /* גובה קבוע */
+    /* margin-right: 0; - אין צורך, flexbox יטפל */
+}
+
+.cart-row .delete-btn:hover {
+    color: #b52a37; /* צבע אדום כהה יותר בריחוף */
+    background-color: rgba(220, 53, 69, 0.1); /* הוספת רקע שקוף קל בריחוף */
+    border-radius: 50%; /* להפוך את אזור הריחוף לעיגול */
+}
+
+/* סה"כ לתשלום */
+#cartDisplay p.total-price {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 30px;
+    text-align: left; /* יישור לימין */
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+}
+
+.pay-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.3em;
+    margin-top: 25px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 350px;
+    margin-left: auto; /* למרכוז הכפתור */
+    margin-right: auto;
+    display: block;
+}
+
+.pay-btn:hover {
+    background-color: #218838;
+}
+
+
+/* ==================== 7. מודל (Login/Register) ==================== */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    justify-content: center; /* למרכז אופקית ואנכית */
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    text-align: center;
+}
+
+.modal-content h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.modal-content button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+}
+
+.modal-content button#do-register {
+    background-color: #ff9800; /* צבע כתום */
+}
+
+.modal-content button#do-register:hover {
+    background-color: #e68900;
+}
+
+.modal-content .close {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-content .close:hover,
+.modal-content .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* ==================== 8. הודעת טוסט - Toast Message ==================== */
+#toast-message {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 3000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.4s, visibility 0.4s;
+}
+
+#toast-message.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* ==================== 9. Footer - פוטר ==================== */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    margin-top: 30px;
+    font-size: 0.9em;
+    flex-shrink: 0; /* מונע מהפוטר להתכווץ */
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* ==================== 10. Media Queries - רספונסיביות ==================== */
+
+@media (max-width: 768px) {
+    /* Header - מובייל טאבלט */
+    header {
+        flex-direction: column;
+        padding: 10px;
+        align-items: center;
+        justify-content: center; /* כדי למרכז גם במובייל אם אין אלמנטים נוספים */
+    }
+
+    header nav {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    header nav button {
+        flex-grow: 1;
+        max-width: 150px;
+    }
+
+    header .logo {
+        height: 60px; /* קטן יותר במובייל */
+        margin-bottom: 10px;
+        margin-left: auto; /* מרכוז במובייל */
+        margin-right: auto;
+    }
+
+    header .left-buttons {
+        /* במובייל, ייתכן שתרצה להסתיר או לשנות את המיקום */
+        display: none; /* לדוגמה, להסתיר כפתורים שמאליים קטנים */
+    }
+
+    /* דף כללי / דף הבית */
+    main {
+        padding: 15px;
+        margin: 15px auto;
+    }
+
+    .carousel {
+        height: 250px; /* גובה קטן יותר במובייל */
+    }
+
+    /* דף מוצרים */
+    section {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        padding: 20px;
+        gap: 20px;
+    }
+
+    section > div {
+        padding: 15px;
+    }
+
+    /* דף פרטי מוצר */
+    article#art {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    article#art aside {
+        min-width: unset;
+        width: 100%;
+    }
+
+    article#art aside p:first-of-type {
+        font-size: 1.8em;
+    }
+
+    article#art aside p:last-of-type {
+        font-size: 1.6em;
+    }
+
+    article#art aside button {
+        width: 90%;
+    }
+
+    /* עגלת קניות */
+    #cartDisplay {
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 95%; /* כדי למנוע גלישה במובייל */
+    }
+
+    .cart-row {
+        flex-wrap: wrap; /* נאפשר שבירת שורה במובייל */
+        justify-content: center;
+        text-align: center;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .cart-row img {
+        margin: 0 auto 10px auto; /* מרכוז תמונה במובייל */
+        width: 80px;
+        height: 80px;
+    }
+
+    .cart-row .product-info {
+        flex-basis: 100%; /* שם ומחיר יתפרסו על כל הרוחב */
+        align-items: center; /* ליישר למרכז במובייל */
+        text-align: center;
+        margin: 0 0 10px 0; /* רווח תחתון במובייל */
+    }
+
+    .cart-row .quantity-controls {
+        width: auto;
+        justify-content: center;
+        flex-basis: 100%; /* שיקבל שורה משלו במובייל */
+        margin-top: 10px;
+        margin-right: 0; /* ביטול שוליים מיותרים */
+    }
+
+    .cart-row .delete-btn {
+        margin-left: 10px; /* רווח מהכפתורים האחרים */
+        font-size: 1.5em; /* גודל סמליל קטן יותר במובייל */
+        height: auto;
+        width: auto;
+        padding: 5px;
+    }
+
+    #cartDisplay p.total-price {
+        text-align: center;
+    }
+
+    .pay-btn {
+        width: 90%;
+    }
+
+    /* מודל */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Header - מובייל קטן */
+    header nav button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    /* דף מוצרים */
+    section {
+        grid-template-columns: 1fr; /* טור אחד בלבד במובייל קטן */
+        padding: 15px;
+        gap: 15px;
+    }
+
+    section > div img {
+        height: 150px;
+    }
+
+    /* דף פרטי מוצר */
+    article#art {
+        padding: 15px;
+    }
+
+    /* עגלת קניות */
+    #cartDisplay {
+        padding: 15px;
+    }
+
+    .cart-row {
+        padding: 10px 0;
+    }
+
+    .cart-row img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .cart-row .quantity-controls button {
+        padding: 4px 8px;
+        font-size: 1em;
+    }
+
+    .cart-row .delete-btn {
+        font-size: 1.3em;
+    }
+
+    #cartDisplay p.total-price {
+        font-size: 1.5em;
+    }
+
+    .pay-btn {
+        font-size: 1.1em;
+        padding: 12px 20px;
+    }
+
+    /* מודל */
+    .modal-content h2 {
+        font-size: 1.5em;
+    }
+
+    .modal-content button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    #welcome {
+        font-size: 1.5em;
+    }
+}

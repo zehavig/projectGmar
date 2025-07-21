@@ -121,3 +121,6 @@ button,
  nav button {
     border-radius: 1px;
 }
+header nav button:nth-child(1) {
+    display: none !important;
+}

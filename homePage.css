@@ -195,3 +195,14 @@ footer {
     align-items: center;
     overflow: hidden;
 }
+/* אם אין לו ID או Class, ואם הוא הכפתור השלישי ב-nav לדוגמה, תוכל להשתמש בזה (פחות מומלץ):
+*/
+header nav button:nth-child(3) {
+    display: none !important;
+}
+
+/* או אם הוא הכפתור "האחרון" (בהנחה ש"התחברות" ו"מוצרים" קודמים לו) */
+
+header nav button:last-child {
+    display: none !important;
+} 

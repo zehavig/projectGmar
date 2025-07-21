@@ -38,7 +38,7 @@ button {
     margin-top: 10px;
     border-radius: 2em;
     font-weight: bold;
-    transition: background 0.2s, color 0.2s;
+    /* transition: background 0.2s, color 0.2s; */
 }
 button:hover {
     background-color: #0056b3;
@@ -145,4 +145,7 @@ header nav {
     gap: 10px;
     align-items: center;
     min-width: 180px;
+}
+header nav button:nth-child(1) {
+    display: none !important;
 }
