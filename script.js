@@ -37,8 +37,7 @@ function prod() {
 // אם הנתונים לא קיימים, הפונקציה תיצור אותם.
 prod();
 
-// --- הוספה מתחילת קוד ה-JS של עמוד הבית (קרוסלת תמונות) ---
-// מערך של נתיבי תמונות לקרוסלה.
+//קרוסלת תמונות של עמוד הבית
 let images = [
     "./img/אופני ילדים POLYGON SISKIU D24.webp",
     "./img/קורקינט פעלולים ASSAULT NEOCHROME.webp",
@@ -46,10 +45,10 @@ let images = [
     "./img/קסדה לאופניים לילדים ABUS SMILEY 3.webp",
     "./img/סקייטבורד ENUFF SKULLY.webp"
 ];
-// משתנה לשמירת האינדקס של התמונה הנוכחית בקרוסלה.
 let currentImg = 0;
-let carouselImg; // ייאתחל ב-DOMContentLoaded
-// --- סוף הוספה מתחילת קוד ה-JS של עמוד הבית ---
+let carouselImg;
+
+
 
 
 //הצגת כל המוצרים בדף הראשי
@@ -285,7 +284,7 @@ function updateLoginBtn() {
 function goToProducts() {
     let email = localStorage.getItem('currentUser');
     if (email) {
-        location.href = 'index.html'; // שנה לכתובת דף המוצרים שלך
+        location.href = 'index.html'; 
     } else {
         let modal = document.getElementById('login-modal');
         if (modal) {
@@ -407,20 +406,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let header = document.createElement("header");
     let nav = document.createElement("nav");
 
-    // כפתור התחברות/הרשמה
     let loginBtn = document.createElement("button");
     loginBtn.id = "login-btn";
-    // אירוע לחיצה על כפתור ההתחברות/הרשמה מטופל בתוך initLoginSystem.
     nav.appendChild(loginBtn);
 
-    // כפתור מוצרים
     let productsBtn = document.createElement("button");
     productsBtn.id = "products-btn";
     productsBtn.textContent = "מוצרים";
-    productsBtn.onclick = goToProducts; // קורא לפונקציה goToProducts בלחיצה.
+    productsBtn.onclick = goToProducts; 
     nav.appendChild(productsBtn);
 
-    // כפתור מעבר לעגלה קיים
     let cartBtn = document.createElement("button");
     cartBtn.textContent = "מעבר לעגלה";
     cartBtn.onclick = function () {
@@ -429,31 +424,23 @@ document.addEventListener("DOMContentLoaded", function () {
     nav.appendChild(cartBtn);
 
     header.appendChild(nav);
-
-    // לוגו
     let logo = document.createElement("img");
     logo.src = "./img/logo.png";
     logo.alt = "לוגו החנות";
     logo.className = "logo";
     logo.onclick = function () {
-        location.href = 'homePage.html'; // מעבר לדף הבית בלחיצה על הלוגו.
+        location.href = 'homePage.html';
     };
     header.appendChild(logo);
 
-    // אלמנט ריק לאיזון (אם נדרש לפי עיצוב ה-CSS)
     let spacerDiv = document.createElement("div");
     spacerDiv.style.width = "180px";
+    spacerDiv.style.backgroundColor = "#007bff"
+    spacerDiv.style.border = "0px"; 
     header.appendChild(spacerDiv);
 
-    // מוסיף את ה-header לתחילת ה-body.
     document.body.prepend(header);
 
-    // --- עדכון תוכן ה-main הקיים (אם דף הבית) ---
-    // יש לוודא שזה מתאים לדף ה-HTML הספציפי.
-    // אם זה דף הבית, הוא יכיל קרוסלה והודעת ברוכים הבאים.
-    // אם זה דף מוצרים או אחר, נשאר את ה-main כפי שהוא ורק נוודא שהאלמנטים הכלליים קיימים.
-
-    // במקרה של דף הבית, נצטרך לוודא שאלמנטים אלו קיימים ב-HTML ושהסקריפט יוכל לעדכן אותם
     carouselImg = document.getElementById('carousel-img');
     if (carouselImg) {
         setInterval(() => {
@@ -461,26 +448,14 @@ document.addEventListener("DOMContentLoaded", function () {
             carouselImg.src = images[currentImg];
         }, 2500);
     }
-    // קריאה לפונקציית אתחול מערכת הלוגין
     initLoginSystem();
 
 
-    // --- בניית Footer דינמית ---
     let footer = document.createElement("footer");
     let contactP = document.createElement("p");
     contactP.innerHTML = `יצירת קשר: <a href="mailto:info@bikestore.co.il">info@bikestore.co.il</a> | טלפון: <a href="tel:03-9876543">03-9876543</a>`;
     footer.appendChild(contactP);
-    document.body.appendChild(footer); // מוסיף את הפוטר לסוף ה-body.
-    // --- סוף שינויים בתוך DOMContentLoaded ---
-
-    // הקוד המקורי של הפוטר שהיה:
-    // let footer = document.createElement("footer");
-    // let phoneP = document.createElement("p");
-    // phoneP.textContent = "📞 טלפון: 03-1234567";
-    // let mailP = document.createElement("p");
-    // mailP.textContent = "📧 מייל: store@example.com";
-    // footer.append(phoneP, mailP);
-    // document.body.appendChild(footer);
+    document.body.appendChild(footer); 
 });
 
 // פונקציה להצגת הודעת טוסט (הודעה קופצת).
